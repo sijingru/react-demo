@@ -1,0 +1,16 @@
+{
+	"presets": [
+		[
+			"@babel/preset-env", 
+			{
+				"targets": {
+					"browsers": ["> 1%", "last 2 versions"]
+				},
+				"corejs": 2,
+				// "usage"| "entry"| false，默认为false
+				"useBuiltIns": "usage" //按需注⼊
+			}
+		],
+		"@babel/preset-react"
+	]
+}
