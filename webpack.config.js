@@ -1,6 +1,7 @@
 const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 const config = {
 	mode: 'development',
@@ -12,15 +13,20 @@ const config = {
 	module: {
 		rules: [
 			{
-				test: '/\.css$/',
+				test: '/\.(css|less)$/',
 				use: [
-					{loader: 'style-loader'},
 					{
-						loader: 'css-loader',
+						loader: MiniCssExtractPlugin.loader,
 						options: {
-							modules: true
-						}
-					}
+							//  默认情况下，它在webpackOptions.output中使用publicPath
+							publicPath: '../',
+							// 这里会直接到 src 文件下找 less/css 文件进行编译，这里是项目优化的一个小技巧
+							include: [path.resolve(__dirname, './src')]
+						},
+					},
+					'css-loader',
+					'postcss-loader',
+					'less-loader'
 				]
 			},
 			{
@@ -50,7 +56,12 @@ const config = {
 			}
 		}),
 		new CleanWebpackPlugin(),
-		new webpack.HotModuleReplacementPlugin()
+		new webpack.HotModuleReplacementPlugin(),
+		new MiniCssExtractPlugin({
+			filename: "[name].css",
+			chunkFilename: "[id].css",
+			ignoreOrder: false	// 启用以删除有关顺序冲突的警告
+		})
 	],
 	// devServer和entry是平级的
 	devServer: {
