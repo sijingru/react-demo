@@ -13,7 +13,7 @@ const config = {
 	module: {
 		rules: [
 			{
-				test: '/\.(css|less)$/',
+				test: /\.(css|less)$/,
 				use: [
 					{
 						loader: MiniCssExtractPlugin.loader,
@@ -21,13 +21,13 @@ const config = {
 							//  默认情况下，它在webpackOptions.output中使用publicPath
 							publicPath: '../',
 							// 这里会直接到 src 文件下找 less/css 文件进行编译，这里是项目优化的一个小技巧
-							include: [path.resolve(__dirname, './src')]
 						},
 					},
 					'css-loader',
 					'postcss-loader',
-					'less-loader'
-				]
+					'less-loader',
+				],
+				include: [path.resolve(__dirname, './src')]
 			},
 			{
 				test: /\.(png|jpg|gif)$/,
