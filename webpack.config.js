@@ -2,9 +2,16 @@ const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// 压缩css文件
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+// 用于处理多路径文件，使用purifycss的时候要用到glob.sync方法。
+const glob = require('glob-all')
+const { NODE_ENV } = process.env;
+// Css tree shanking 摇树
+const PurgeCSSPlugin = require('purgecss-webpack-plugin')
 const webpack = require('webpack')
 const config = {
-	mode: 'development',
+	mode: NODE_ENV,
 	entry: path.resolve(__dirname, './src/react.js'),
 	output: {
 		path: path.resolve(__dirname, './dist'),
@@ -56,11 +63,23 @@ const config = {
 			}
 		}),
 		new CleanWebpackPlugin(),
+		// 热更新所需的插件
 		new webpack.HotModuleReplacementPlugin(),
 		new MiniCssExtractPlugin({
 			filename: "[name].css",
 			chunkFilename: "[id].css",
 			ignoreOrder: false	// 启用以删除有关顺序冲突的警告
+		}),
+		// 压缩css文件
+		new OptimizeCssAssetsWebpackPlugin({
+				cssProcessor: require('cssnano'),
+				cssProcessorPluginOptions: {
+						// 去掉注释
+						preset: ["default", { discardComments: { removeAll: true } }]
+				}
+		}),
+		new PurgeCSSPlugin({
+			paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, { nodir: true })
 		})
 	],
 	// devServer和entry是平级的
