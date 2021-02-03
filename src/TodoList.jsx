@@ -6,16 +6,12 @@ class TodoList extends Component {
 		return <div>
 			{
 				this.props.todoList.map(item => (
-					<>
-					{
-						(!item.status) && (
-							<section key={item.id}>
-						<input type="checkbox" onChange={() => this.props.changeTaskStatus(item.id)} readOnly value={item.status} checked={item.status ? 'checked' : null}/>
-						<span>{item.name}</span>
-					</section>
-						)
-					}
-				</>
+					(
+						<section key={item.id}>
+							<input type="checkbox" onChange={() => this.props.changeTaskStatus(item.id)} readOnly value={item.status} checked={item.status ? 'checked' : null}/>
+							<span>{item.name}</span>
+						</section>
+					)
 				))
 			}
 		</div>
