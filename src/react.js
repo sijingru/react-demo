@@ -5,6 +5,7 @@ import './index.less'
 import TopBar from './TopBar.jsx'
 import TodoList from './TodoList.jsx'
 import PutTask from './PutTask.jsx'
+import NameForm from './NameForm.jsx'
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -64,6 +65,7 @@ class App extends Component {
 				</div>
 				<TodoList todoList={this.state.todoList} doneStatus={this.state.doneStatus} changeTaskStatus={(id) => this.changeTaskStatus(id)} />
 				<PutTask addTask={(taskName) => this.addTask(taskName)}/>
+				<NameForm ></NameForm>
 		</div>
 	}
 }
